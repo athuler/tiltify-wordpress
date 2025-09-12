@@ -46,7 +46,17 @@ class Tiltify_Admin {
         // Register settings
         register_setting(
             'tiltify_settings',
-            'tiltify_api_token',
+            'tiltify_client_id',
+            array(
+                'type' => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+                'default' => ''
+            )
+        );
+
+        register_setting(
+            'tiltify_settings',
+            'tiltify_client_secret',
             array(
                 'type' => 'string',
                 'sanitize_callback' => 'sanitize_text_field',
@@ -126,9 +136,17 @@ class Tiltify_Admin {
     private function add_settings_fields() {
         // API Configuration fields
         add_settings_field(
-            'tiltify_api_token',
-            __('API Token', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            array($this, 'api_token_callback'),
+            'tiltify_client_id',
+            __('Client ID', TILTIFY_INTEGRATION_TEXT_DOMAIN),
+            array($this, 'client_id_callback'),
+            'tiltify-settings',
+            'tiltify_api_section'
+        );
+
+        add_settings_field(
+            'tiltify_client_secret',
+            __('Client Secret', TILTIFY_INTEGRATION_TEXT_DOMAIN),
+            array($this, 'client_secret_callback'),
             'tiltify-settings',
             'tiltify_api_section'
         );
@@ -253,7 +271,7 @@ class Tiltify_Admin {
      * API section callback
      */
     public function api_section_callback() {
-        echo '<p>' . __('Configure your Tiltify API credentials. You can get your API token from your Tiltify dashboard.', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+        echo '<p>' . __('Configure your Tiltify API credentials. You can get your Client ID and Client Secret from your Tiltify application dashboard. For public campaigns, these fields are optional.', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
     /**
@@ -271,12 +289,21 @@ class Tiltify_Admin {
     }
 
     /**
-     * API token field callback
+     * Client ID field callback
      */
-    public function api_token_callback() {
-        $value = get_option('tiltify_api_token', '');
-        echo '<input type="password" id="tiltify_api_token" name="tiltify_api_token" value="' . esc_attr($value) . '" class="regular-text" />';
-        echo '<p class="description">' . __('Your Tiltify API token (optional for public campaigns)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+    public function client_id_callback() {
+        $value = get_option('tiltify_client_id', '');
+        echo '<input type="text" id="tiltify_client_id" name="tiltify_client_id" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . __('Your Tiltify application Client ID (optional for public campaigns)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+    }
+
+    /**
+     * Client Secret field callback
+     */
+    public function client_secret_callback() {
+        $value = get_option('tiltify_client_secret', '');
+        echo '<input type="password" id="tiltify_client_secret" name="tiltify_client_secret" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . __('Your Tiltify application Client Secret (optional for public campaigns)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
     /**
@@ -373,11 +400,12 @@ class Tiltify_Admin {
             wp_die(__('Insufficient permissions', TILTIFY_INTEGRATION_TEXT_DOMAIN));
         }
 
-        $api_token = sanitize_text_field($_POST['api_token']);
+        $client_id = sanitize_text_field($_POST['client_id']);
+        $client_secret = sanitize_text_field($_POST['client_secret']);
         $campaign_id = sanitize_text_field($_POST['campaign_id']);
 
         $api = new Tiltify_API();
-        $result = $api->test_connection($api_token, $campaign_id);
+        $result = $api->test_connection($client_id, $client_secret, $campaign_id);
 
         wp_send_json($result);
     }

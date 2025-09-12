@@ -22,9 +22,19 @@ class Tiltify_API {
     private $api_base = 'https://v5api.tiltify.com';
 
     /**
-     * API token for authentication
+     * Client ID for authentication
      */
-    private $api_token;
+    private $client_id;
+
+    /**
+     * Client Secret for authentication
+     */
+    private $client_secret;
+
+    /**
+     * Access token (obtained via OAuth)
+     */
+    private $access_token;
 
     /**
      * Cache duration in seconds (default 5 minutes)
@@ -35,7 +45,9 @@ class Tiltify_API {
      * Constructor
      */
     public function __construct() {
-        $this->api_token = get_option('tiltify_api_token', '');
+        $this->client_id = get_option('tiltify_client_id', '');
+        $this->client_secret = get_option('tiltify_client_secret', '');
+        $this->access_token = null;
         $this->cache_duration = get_option('tiltify_cache_duration', 300);
     }
 
@@ -126,11 +138,15 @@ class Tiltify_API {
      * @param string $campaign_id Campaign ID to test
      * @return array Result of connection test
      */
-    public function test_connection($api_token = null, $campaign_id = null) {
-        $original_token = $this->api_token;
+    public function test_connection($client_id = null, $client_secret = null, $campaign_id = null) {
+        $original_client_id = $this->client_id;
+        $original_client_secret = $this->client_secret;
 
-        if ($api_token !== null) {
-            $this->api_token = $api_token;
+        if ($client_id !== null) {
+            $this->client_id = $client_id;
+        }
+        if ($client_secret !== null) {
+            $this->client_secret = $client_secret;
         }
 
         if (empty($campaign_id)) {
@@ -148,8 +164,9 @@ class Tiltify_API {
         $endpoint = "/api/public/campaigns/{$campaign_id}";
         $response = $this->make_request($endpoint, array(), false); // Don't cache test requests
 
-        // Restore original token
-        $this->api_token = $original_token;
+        // Restore original credentials
+        $this->client_id = $original_client_id;
+        $this->client_secret = $original_client_secret;
 
         if (is_wp_error($response)) {
             return array(
@@ -188,9 +205,10 @@ class Tiltify_API {
             )
         );
 
-        // Add authorization header if token is available
-        if (!empty($this->api_token)) {
-            $args['headers']['Authorization'] = 'Bearer ' . $this->api_token;
+        // Add authorization header if credentials are available
+        // For public campaigns, authentication is optional
+        if (!empty($this->access_token)) {
+            $args['headers']['Authorization'] = 'Bearer ' . $this->access_token;
         }
 
         // Make the request

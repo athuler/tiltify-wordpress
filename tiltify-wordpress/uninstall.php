@@ -17,7 +17,8 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 function tiltify_wordpress_uninstall() {
     // Remove plugin options
     $options_to_delete = array(
-        'tiltify_api_token',
+        'tiltify_client_id',
+        'tiltify_client_secret',
         'tiltify_campaign_id',
         'tiltify_refresh_interval',
         'tiltify_cache_duration',

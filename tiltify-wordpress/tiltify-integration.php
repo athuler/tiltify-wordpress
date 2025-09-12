@@ -3,7 +3,7 @@
  * Plugin Name: Tiltify Wordpress Integration
  * Plugin URI: https://github.com/athuler/tiltify-wordpress
  * Description: Display live fundraising data from Tiltify campaigns with real-time updates, donation buttons, and customizable widgets.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Andrei Thüler
  * Author URI: https://andreithuler.com
  * License: GPL v2 or later
@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('TILTIFY_INTEGRATION_VERSION', '0.1.0');
+define('TILTIFY_INTEGRATION_VERSION', '0.1.1');
 define('TILTIFY_INTEGRATION_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('TILTIFY_INTEGRATION_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('TILTIFY_INTEGRATION_PLUGIN_FILE', __FILE__);
@@ -71,6 +71,9 @@ class TiltifyWordPress {
         
         // Load plugin textdomain for internationalization
         add_action('plugins_loaded', array($this, 'load_textdomain'));
+        
+        // Add settings link to plugin actions
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_settings_link'));
     }
 
     /**
@@ -211,7 +214,8 @@ class TiltifyWordPress {
      */
     public function activate() {
         // Set default options
-        add_option('tiltify_api_token', '');
+        add_option('tiltify_client_id', '');
+        add_option('tiltify_client_secret', '');
         add_option('tiltify_campaign_id', '');
         add_option('tiltify_refresh_interval', 30);
         add_option('tiltify_cache_duration', 300);
@@ -287,6 +291,15 @@ class TiltifyWordPress {
      */
     public function get_widget() {
         return $this->widget;
+    }
+
+    /**
+     * Add settings link to plugin actions
+     */
+    public function add_settings_link($links) {
+        $settings_link = '<a href="' . admin_url('options-general.php?page=tiltify-settings') . '">' . __('Settings', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</a>';
+        array_unshift($links, $settings_link);
+        return $links;
     }
 }
 

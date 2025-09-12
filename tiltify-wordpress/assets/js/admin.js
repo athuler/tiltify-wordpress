@@ -29,7 +29,7 @@
             $('#tiltify-clear-cache').on('click', this.clearCache.bind(this));
             
             // Auto-save settings when typing (with debounce)
-            $('#tiltify_api_token, #tiltify_campaign_id').on('input', 
+            $('#tiltify_client_id, #tiltify_client_secret, #tiltify_campaign_id').on('input', 
                 this.debounce(this.validateFields.bind(this), 500)
             );
             
@@ -48,7 +48,8 @@
             
             var $button = $('#tiltify-test-connection');
             var $result = $('#tiltify-test-result');
-            var apiToken = $('#tiltify_api_token').val();
+            var clientId = $('#tiltify_client_id').val();
+            var clientSecret = $('#tiltify_client_secret').val();
             var campaignId = $('#tiltify_campaign_id').val();
             
             // Validate inputs
@@ -68,7 +69,8 @@
                 type: 'POST',
                 data: {
                     action: 'tiltify_test_connection',
-                    api_token: apiToken,
+                    client_id: clientId,
+                    client_secret: clientSecret,
                     campaign_id: campaignId,
                     nonce: tiltifyAdmin.nonce
                 },
@@ -144,7 +146,7 @@
          * Validate form fields
          */
         validateFields: function() {
-            var $apiToken = $('#tiltify_api_token');
+            var $clientId = $('#tiltify_client_id');
             var $campaignId = $('#tiltify_campaign_id');
             
             // Campaign ID validation
@@ -159,12 +161,12 @@
                 this.clearFieldError($campaignId);
             }
             
-            // API token validation (basic length check)
-            var apiToken = $apiToken.val().trim();
-            if (apiToken && apiToken.length < 10) {
-                this.showFieldError($apiToken, 'API token appears to be too short');
+            // Client ID validation (optional)
+            var clientId = $clientId.val().trim();
+            if (clientId && clientId.length < 5) {
+                this.showFieldError($clientId, 'Client ID appears to be too short');
             } else {
-                this.clearFieldError($apiToken);
+                this.clearFieldError($clientId);
             }
         },
 
@@ -193,13 +195,13 @@
          * Setup password field toggle
          */
         setupPasswordToggle: function() {
-            var $apiTokenField = $('#tiltify_api_token');
+            var $clientSecretField = $('#tiltify_client_secret');
             var $toggleButton = $('<button type="button" class="button" style="margin-left: 5px;">Show</button>');
             
-            $apiTokenField.after($toggleButton);
+            $clientSecretField.after($toggleButton);
             
             $toggleButton.on('click', function() {
-                var $field = $apiTokenField;
+                var $field = $clientSecretField;
                 var currentType = $field.attr('type');
                 
                 if (currentType === 'password') {
