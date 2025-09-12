@@ -1,0 +1,531 @@
+/**
+ * Frontend styles for Tiltify WordPress
+ * Responsive CSS for all display elements
+ */
+
+/* Base Tiltify Styles */
+.tiltify-amount,
+.tiltify-goal,
+.tiltify-progress-container,
+.tiltify-campaign-info,
+.tiltify-recent-donations,
+.tiltify-widget-content {
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+/* Error Messages */
+.tiltify-error {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px 15px;
+    border: 1px solid #ef9a9a;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+/* Amount and Goal Display */
+.tiltify-amount,
+.tiltify-goal {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Progress Bar Styles */
+.tiltify-progress-container {
+    margin: 15px 0;
+}
+
+.tiltify-progress-amounts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tiltify-raised {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #2c3e50;
+}
+
+.tiltify-goal-text {
+    color: #7f8c8d;
+}
+
+.tiltify-percentage {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+.tiltify-progress-bar {
+    width: 100%;
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tiltify-progress-fill {
+    background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+    border-radius: 10px 0 0 10px;
+    position: relative;
+}
+
+.tiltify-progress-fill:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        transparent 25%, 
+        rgba(255, 255, 255, 0.1) 25%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 50%, 
+        transparent 75%, 
+        rgba(255, 255, 255, 0.1) 75%
+    );
+    background-size: 20px 20px;
+    animation: progress-shine 2s linear infinite;
+}
+
+@keyframes progress-shine {
+    0% { background-position: -20px 0; }
+    100% { background-position: 20px 0; }
+}
+
+.tiltify-progress-percentage {
+    text-align: center;
+    margin-top: 5px;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+/* Donate Button Styles */
+.tiltify-donate-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
+}
+
+.tiltify-donate-button:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.tiltify-donate-button:active {
+    transform: translateY(0);
+}
+
+/* Button Size Variations */
+.tiltify-button-small {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.tiltify-button-large {
+    padding: 16px 32px;
+    font-size: 18px;
+}
+
+/* Campaign Info Styles */
+.tiltify-campaign-info {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.tiltify-campaign-name {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-size: 1.5em;
+}
+
+.tiltify-campaign-description {
+    color: #6c757d;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.tiltify-campaign-progress {
+    margin: 20px 0;
+}
+
+.tiltify-campaign-donate {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.tiltify-campaign-stats {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #dee2e6;
+}
+
+.tiltify-stat {
+    display: inline-block;
+    margin-right: 20px;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Recent Donations Styles */
+.tiltify-recent-donations {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.tiltify-donations-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tiltify-donation-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.tiltify-donation-item:last-child {
+    border-bottom: none;
+}
+
+.tiltify-donation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.tiltify-donor-name {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.tiltify-donation-amount {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.tiltify-donation-comment {
+    font-style: italic;
+    color: #6c757d;
+    margin: 5px 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.tiltify-donation-time {
+    font-size: 12px;
+    color: #adb5bd;
+}
+
+.tiltify-no-donations {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Widget Styles */
+.tiltify-widget-content {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.tiltify-widget-description {
+    color: #6c757d;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.tiltify-widget-progress {
+    margin-bottom: 15px;
+}
+
+.tiltify-raised-amount {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.tiltify-raised-amount strong {
+    display: block;
+    font-size: 1.4em;
+    color: #2c3e50;
+}
+
+.tiltify-label {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tiltify-goal-amount {
+    text-align: center;
+    font-size: 12px;
+    color: #95a5a6;
+    margin-bottom: 10px;
+}
+
+.tiltify-widget-progress-bar {
+    margin: 10px 0;
+}
+
+.tiltify-progress-bg {
+    width: 100%;
+    height: 12px;
+    background-color: #ecf0f1;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.tiltify-widget-stats {
+    text-align: center;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.tiltify-stat-value {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.tiltify-stat-label {
+    font-size: 11px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tiltify-widget-recent h4 {
+    margin: 15px 0 10px 0;
+    font-size: 14px;
+    color: #2c3e50;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+}
+
+.tiltify-recent-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tiltify-recent-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.tiltify-recent-item:last-child {
+    border-bottom: none;
+}
+
+.tiltify-donor {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.tiltify-amount {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.tiltify-widget-donate {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.tiltify-widget-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+.tiltify-widget-powered {
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #f1f3f4;
+}
+
+.tiltify-widget-powered small {
+    color: #adb5bd;
+    font-size: 11px;
+}
+
+.tiltify-widget-powered a {
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.tiltify-widget-powered a:hover {
+    color: #495057;
+}
+
+/* Loading States */
+.tiltify-loading {
+    opacity: 0.7;
+    position: relative;
+}
+
+.tiltify-loading:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tiltify-progress-amounts {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .tiltify-campaign-info {
+        padding: 15px;
+    }
+    
+    .tiltify-donate-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .tiltify-donation-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .tiltify-stat {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tiltify-campaign-info,
+    .tiltify-recent-donations {
+        padding: 12px;
+        margin: 15px 0;
+    }
+    
+    .tiltify-campaign-name {
+        font-size: 1.3em;
+    }
+    
+    .tiltify-widget-button {
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .tiltify-campaign-info {
+        background: #2c3e50;
+        border-color: #34495e;
+        color: #ecf0f1;
+    }
+    
+    .tiltify-campaign-name {
+        color: #ecf0f1;
+    }
+    
+    .tiltify-campaign-description {
+        color: #bdc3c7;
+    }
+    
+    .tiltify-recent-donations {
+        background: #2c3e50;
+        border-color: #34495e;
+    }
+    
+    .tiltify-donor-name {
+        color: #ecf0f1;
+    }
+    
+    .tiltify-donation-comment {
+        color: #95a5a6;
+    }
+    
+    .tiltify-widget-content {
+        background: #2c3e50;
+        color: #ecf0f1;
+    }
+    
+    .tiltify-widget-stats {
+        background: #34495e;
+    }
+    
+    .tiltify-stat-value {
+        color: #ecf0f1;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .tiltify-donate-button {
+        display: none;
+    }
+    
+    .tiltify-progress-fill:after {
+        display: none;
+    }
+    
+    .tiltify-loading:after {
+        display: none;
+    }
+}
