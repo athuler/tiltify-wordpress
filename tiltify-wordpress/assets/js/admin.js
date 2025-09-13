@@ -58,6 +58,11 @@
                 return;
             }
             
+            if (!clientId.trim() || !clientSecret.trim()) {
+                this.showResult($result, 'error', 'Client ID and Client Secret are required');
+                return;
+            }
+            
             // Show loading state
             $button.addClass('tiltify-loading').prop('disabled', true);
             $result.removeClass('success error').addClass('loading')
@@ -161,9 +166,11 @@
                 this.clearFieldError($campaignId);
             }
             
-            // Client ID validation (optional)
+            // Client ID validation (required)
             var clientId = $clientId.val().trim();
-            if (clientId && clientId.length < 5) {
+            if (!clientId) {
+                this.showFieldError($clientId, 'Client ID is required');
+            } else if (clientId.length < 5) {
                 this.showFieldError($clientId, 'Client ID appears to be too short');
             } else {
                 this.clearFieldError($clientId);
@@ -176,10 +183,24 @@
         validateFormSubmission: function(e) {
             var hasErrors = false;
             var $campaignId = $('#tiltify_campaign_id');
+            var $clientId = $('#tiltify_client_id');
+            var $clientSecret = $('#tiltify_client_secret');
             
             // Campaign ID is required
             if (!$campaignId.val().trim()) {
                 this.showFieldError($campaignId, 'Campaign ID is required');
+                hasErrors = true;
+            }
+            
+            // Client ID is required
+            if (!$clientId.val().trim()) {
+                this.showFieldError($clientId, 'Client ID is required');
+                hasErrors = true;
+            }
+            
+            // Client Secret is required
+            if (!$clientSecret.val().trim()) {
+                this.showFieldError($clientSecret, 'Client Secret is required');
                 hasErrors = true;
             }
             
