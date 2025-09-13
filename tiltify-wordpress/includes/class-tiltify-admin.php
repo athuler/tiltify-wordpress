@@ -229,6 +229,52 @@ class Tiltify_Admin {
                     </div>
                 </div>
             </div>
+
+            <div class="tiltify-about-info">
+                <h2><?php _e('About This Plugin', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?></h2>
+                <div class="tiltify-about-grid">
+                    <div class="tiltify-about-card">
+                        <h3><?php _e('Made by', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?></h3>
+                        <p>
+                            <?php _e('Developed by', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?> 
+                            <a href="https://andreithuler.com" target="_blank" rel="noopener">Andrei Thüler</a>
+                        </p>
+                    </div>
+                    <div class="tiltify-about-card">
+                        <h3><?php _e('Source Code', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?></h3>
+                        <p>
+                            <a href="https://github.com/athuler/tiltify-wordpress" target="_blank" rel="noopener">
+                                <span class="dashicons dashicons-admin-links"></span>
+                                <?php _e('View on GitHub', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="tiltify-about-card">
+                        <h3><?php _e('Support Development', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?></h3>
+                        <p>
+                            <a href="https://github.com/sponsors/athuler" target="_blank" rel="noopener">
+                                <span class="dashicons dashicons-heart"></span>
+                                <?php _e('Sponsor on GitHub', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="tiltify-about-card">
+                        <h3><?php _e('Need Help?', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?></h3>
+                        <p>
+                            <a href="https://github.com/athuler/tiltify-wordpress/issues" target="_blank" rel="noopener">
+                                <span class="dashicons dashicons-sos"></span>
+                                <?php _e('Report a Bug / Suggest a Feature', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="tiltify-plugin-version">
+                    <p>
+                        <strong><?php _e('Version:', TILTIFY_INTEGRATION_TEXT_DOMAIN); ?></strong> 
+                        <?php echo esc_html(TILTIFY_INTEGRATION_VERSION); ?>
+                    </p>
+                </div>
+            </div>
         </div>
         <?php
     }

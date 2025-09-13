@@ -60,20 +60,31 @@
     padding-top: 30px;
 }
 
-.tiltify-usage-info h2 {
+/* About Plugin Section */
+.tiltify-about-info {
+    padding: 20px 0;
+    margin-top: 30px;
+    border-top: 2px solid #ddd;
+    padding-top: 30px;
+}
+
+.tiltify-usage-info h2,
+.tiltify-about-info h2 {
     margin-top: 0;
     color: #23282d;
     padding-bottom: 10px;
 }
 
-.tiltify-usage-grid {
+.tiltify-usage-grid,
+.tiltify-about-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
 
-.tiltify-usage-card {
+.tiltify-usage-card,
+.tiltify-about-card {
     background: white;
     border: 1px solid #e5e5e5;
     border-radius: 6px;
@@ -81,7 +92,8 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.tiltify-usage-card h3 {
+.tiltify-usage-card h3,
+.tiltify-about-card h3 {
     margin-top: 0;
     margin-bottom: 15px;
     color: #0073aa;
@@ -107,10 +119,41 @@
     color: #d63384;
 }
 
-.tiltify-usage-card p {
+.tiltify-usage-card p,
+.tiltify-about-card p {
     margin: 0;
     line-height: 1.6;
     color: #666;
+}
+
+/* About section specific styling */
+.tiltify-about-card a {
+    text-decoration: none;
+    color: #0073aa;
+    font-weight: 500;
+}
+
+.tiltify-about-card a:hover {
+    color: #005a87;
+    text-decoration: underline;
+}
+
+.tiltify-about-card .dashicons {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.tiltify-plugin-version {
+    margin-top: 20px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.tiltify-plugin-version p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
 }
 
 /* Settings Sections */
@@ -253,13 +296,20 @@ select:focus {
         color: #e2e8f0;
     }
     
-    .tiltify-usage-card {
+    .tiltify-about-info {
+        border-color: #718096;
+        color: #e2e8f0;
+    }
+    
+    .tiltify-usage-card,
+    .tiltify-about-card {
         background: #4a5568;
         border-color: #718096;
         color: #e2e8f0;
     }
     
-    .tiltify-usage-card h3 {
+    .tiltify-usage-card h3,
+    .tiltify-about-card h3 {
         color: #63b3ed;
     }
     
@@ -268,7 +318,24 @@ select:focus {
         color: #f687b3;
     }
     
-    .tiltify-usage-card p {
+    .tiltify-usage-card p,
+    .tiltify-about-card p {
+        color: #a0aec0;
+    }
+    
+    .tiltify-about-card a {
+        color: #90cdf4;
+    }
+    
+    .tiltify-about-card a:hover {
+        color: #bee3f8;
+    }
+    
+    .tiltify-plugin-version {
+        border-color: #718096;
+    }
+    
+    .tiltify-plugin-version p {
         color: #a0aec0;
     }
 }
