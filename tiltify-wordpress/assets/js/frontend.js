@@ -40,6 +40,11 @@
         startLiveUpdates: function() {
             var self = this;
             
+            // Check if live updates are enabled
+            if (!tiltifyAjax.live_updates_enabled) {
+                return;
+            }
+            
             // Find all elements that need live updates
             var $liveElements = $('.tiltify-live-update');
             

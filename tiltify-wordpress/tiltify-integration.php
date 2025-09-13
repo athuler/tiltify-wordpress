@@ -162,10 +162,12 @@ class TiltifyWordPress {
         );
 
         // Localize script for AJAX
+        $refresh_interval = get_option('tiltify_refresh_interval', 30);
         wp_localize_script('tiltify-integration-frontend', 'tiltifyAjax', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('tiltify_update_nonce'),
-            'refresh_interval' => get_option('tiltify_refresh_interval', 30) * 1000
+            'refresh_interval' => $refresh_interval * 1000,
+            'live_updates_enabled' => $refresh_interval > 0
         ));
     }
 

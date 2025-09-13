@@ -65,7 +65,7 @@ class Tiltify_Shortcodes {
         if (!empty($atts['class'])) {
             $classes .= ' ' . sanitize_html_class($atts['class']);
         }
-        if ($atts['live_update'] === 'true') {
+        if ($this->should_enable_live_updates($atts['live_update'])) {
             $classes .= ' tiltify-live-update';
         }
 
@@ -147,7 +147,7 @@ class Tiltify_Shortcodes {
         if (!empty($atts['class'])) {
             $classes .= ' ' . sanitize_html_class($atts['class']);
         }
-        if ($atts['live_update'] === 'true') {
+        if ($this->should_enable_live_updates($atts['live_update'])) {
             $classes .= ' tiltify-live-update';
         }
 
@@ -252,7 +252,7 @@ class Tiltify_Shortcodes {
         if (!empty($atts['class'])) {
             $classes .= ' ' . sanitize_html_class($atts['class']);
         }
-        if ($atts['live_update'] === 'true') {
+        if ($this->should_enable_live_updates($atts['live_update'])) {
             $classes .= ' tiltify-live-update';
         }
 
@@ -324,7 +324,7 @@ class Tiltify_Shortcodes {
         if (!empty($atts['class'])) {
             $classes .= ' ' . sanitize_html_class($atts['class']);
         }
-        if ($atts['live_update'] === 'true') {
+        if ($this->should_enable_live_updates($atts['live_update'])) {
             $classes .= ' tiltify-live-update';
         }
 
@@ -372,6 +372,18 @@ class Tiltify_Shortcodes {
             return '<div class="tiltify-error">' . esc_html($message) . '</div>';
         }
         return '<div class="tiltify-error">' . __('Unable to load fundraising data.', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</div>';
+    }
+
+    /**
+     * Check if live updates should be enabled
+     */
+    private function should_enable_live_updates($live_update_param) {
+        if ($live_update_param !== 'true') {
+            return false;
+        }
+        
+        $refresh_interval = get_option('tiltify_refresh_interval', 30);
+        return $refresh_interval > 0;
     }
 
     /**

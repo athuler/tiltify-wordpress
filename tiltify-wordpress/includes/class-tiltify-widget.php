@@ -74,7 +74,7 @@ class Tiltify_Widget extends WP_Widget {
 
         $live_update = isset($instance['live_update']) ? $instance['live_update'] : true;
         $widget_classes = 'tiltify-widget-content';
-        if ($live_update) {
+        if ($live_update && $this->should_enable_live_updates()) {
             $widget_classes .= ' tiltify-live-update';
         }
 
@@ -292,5 +292,13 @@ class Tiltify_Widget extends WP_Widget {
         }
 
         return $instance;
+    }
+
+    /**
+     * Check if live updates should be enabled
+     */
+    private function should_enable_live_updates() {
+        $refresh_interval = get_option('tiltify_refresh_interval', 30);
+        return $refresh_interval > 0;
     }
 }

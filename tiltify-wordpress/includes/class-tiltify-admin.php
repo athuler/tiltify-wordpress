@@ -301,9 +301,9 @@ class Tiltify_Admin {
      */
     public function refresh_interval_callback() {
         $value = get_option('tiltify_refresh_interval', 30);
-        echo '<input type="number" id="tiltify_refresh_interval" name="tiltify_refresh_interval" value="' . esc_attr($value) . '" min="10" max="300" /> ';
+        echo '<input type="number" id="tiltify_refresh_interval" name="tiltify_refresh_interval" value="' . esc_attr($value) . '" min="0" max="300" /> ';
         echo __('seconds', TILTIFY_INTEGRATION_TEXT_DOMAIN);
-        echo '<p class="description">' . __('How often to update live data (10-300 seconds)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+        echo '<p class="description">' . __('How often to update live data (0 = disabled, 10-300 seconds)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
     /**
@@ -330,6 +330,9 @@ class Tiltify_Admin {
      */
     public function sanitize_refresh_interval($value) {
         $value = intval($value);
+        if ($value === 0) {
+            return 0; // Allow 0 to disable live updates
+        }
         return max(10, min(300, $value));
     }
 
