@@ -94,15 +94,6 @@ class Tiltify_Admin {
             )
         );
 
-        register_setting(
-            'tiltify_settings',
-            'tiltify_default_currency',
-            array(
-                'type' => 'string',
-                'sanitize_callback' => 'sanitize_text_field',
-                'default' => 'USD'
-            )
-        );
 
         // Add settings sections
         add_settings_section(
@@ -112,12 +103,6 @@ class Tiltify_Admin {
             'tiltify-settings'
         );
 
-        add_settings_section(
-            'tiltify_display_section',
-            __('Display Settings', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            array($this, 'display_section_callback'),
-            'tiltify-settings'
-        );
 
         add_settings_section(
             'tiltify_performance_section',
@@ -167,14 +152,6 @@ class Tiltify_Admin {
             'tiltify_api_section'
         );
 
-        // Display Settings fields
-        add_settings_field(
-            'tiltify_default_currency',
-            __('Default Currency', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            array($this, 'default_currency_callback'),
-            'tiltify-settings',
-            'tiltify_display_section'
-        );
 
         // Performance Settings fields
         add_settings_field(
@@ -274,12 +251,6 @@ class Tiltify_Admin {
         echo '<p>' . __('Configure your Tiltify API credentials. You can get your Client ID and Client Secret from your Tiltify application dashboard. For public campaigns, these fields are optional.', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
-    /**
-     * Display section callback
-     */
-    public function display_section_callback() {
-        echo '<p>' . __('Customize how fundraising data is displayed on your website.', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
-    }
 
     /**
      * Performance section callback
@@ -324,26 +295,6 @@ class Tiltify_Admin {
         echo '<p class="description">' . __('Test your API credentials and campaign ID', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
-    /**
-     * Default currency callback
-     */
-    public function default_currency_callback() {
-        $value = get_option('tiltify_default_currency', 'USD');
-        $currencies = array(
-            'USD' => __('US Dollar ($)', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            'EUR' => __('Euro (€)', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            'GBP' => __('British Pound (£)', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            'CAD' => __('Canadian Dollar (CA$)', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            'AUD' => __('Australian Dollar (AU$)', TILTIFY_INTEGRATION_TEXT_DOMAIN)
-        );
-
-        echo '<select id="tiltify_default_currency" name="tiltify_default_currency">';
-        foreach ($currencies as $code => $name) {
-            echo '<option value="' . esc_attr($code) . '"' . selected($value, $code, false) . '>' . esc_html($name) . '</option>';
-        }
-        echo '</select>';
-        echo '<p class="description">' . __('Default currency for displaying amounts', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
-    }
 
     /**
      * Refresh interval callback

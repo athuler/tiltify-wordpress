@@ -21,8 +21,7 @@ function tiltify_wordpress_uninstall() {
         'tiltify_client_secret',
         'tiltify_campaign_id',
         'tiltify_refresh_interval',
-        'tiltify_cache_duration',
-        'tiltify_default_currency'
+        'tiltify_cache_duration'
     );
 
     foreach ($options_to_delete as $option) {
