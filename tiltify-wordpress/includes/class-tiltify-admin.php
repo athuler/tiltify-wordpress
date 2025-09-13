@@ -31,8 +31,8 @@ class Tiltify_Admin {
      */
     public function add_admin_menu() {
         add_options_page(
-            __('Tiltify Settings', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-            __('Tiltify', TILTIFY_INTEGRATION_TEXT_DOMAIN),
+            __('Tiltify Integration Settings', TILTIFY_INTEGRATION_TEXT_DOMAIN),
+            __('Tiltify Integration', TILTIFY_INTEGRATION_TEXT_DOMAIN),
             'manage_options',
             'tiltify-settings',
             array($this, 'settings_page')
