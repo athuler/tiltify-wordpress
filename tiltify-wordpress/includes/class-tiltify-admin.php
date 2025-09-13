@@ -248,7 +248,7 @@ class Tiltify_Admin {
      * API section callback
      */
     public function api_section_callback() {
-        echo '<p>' . __('Configure your Tiltify API credentials. You can get your Client ID and Client Secret from your Tiltify application dashboard. These credentials are required to access campaign data.', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+        echo '<p>' . __('Configure your Tiltify API credentials. You can get your Client ID and Client Secret from your Tiltify application dashboard.', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
 
@@ -265,7 +265,7 @@ class Tiltify_Admin {
     public function client_id_callback() {
         $value = get_option('tiltify_client_id', '');
         echo '<input type="text" id="tiltify_client_id" name="tiltify_client_id" value="' . esc_attr($value) . '" class="regular-text" />';
-        echo '<p class="description">' . __('Your Tiltify application Client ID (required)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+        echo '<p class="description">' . __('Your Tiltify application Client ID', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
     /**
@@ -274,7 +274,7 @@ class Tiltify_Admin {
     public function client_secret_callback() {
         $value = get_option('tiltify_client_secret', '');
         echo '<input type="password" id="tiltify_client_secret" name="tiltify_client_secret" value="' . esc_attr($value) . '" class="regular-text" />';
-        echo '<p class="description">' . __('Your Tiltify application Client Secret (required)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+        echo '<p class="description">' . __('Your Tiltify application Client Secret', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
     /**
