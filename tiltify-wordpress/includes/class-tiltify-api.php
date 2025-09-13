@@ -161,12 +161,10 @@ class Tiltify_API {
         }
 
         // Try to fetch campaign data
-        // Based on Tiltify API v5 OpenAPI specification
+        // Based on logs, only these endpoints exist and require authentication
         $endpoints_to_try = array(
             "/api/public/campaigns/{$campaign_id}",
-            "/api/public/fundraising_events/{$campaign_id}",
-            "/campaigns/{$campaign_id}",
-            "/fundraising_events/{$campaign_id}"
+            "/api/public/fundraising_events/{$campaign_id}"
         );
         
         $response = null;
@@ -180,7 +178,8 @@ class Tiltify_API {
             
             if (!is_wp_error($test_response)) {
                 $response = $test_response;
-                error_log("Success with endpoint: " . $endpoint);
+                error_log("SUCCESS with endpoint: " . $endpoint);
+                error_log("API Response: " . json_encode($test_response, JSON_PRETTY_PRINT));
                 break;
             } else {
                 $last_error = $test_response;
@@ -241,23 +240,40 @@ class Tiltify_API {
         );
 
         // Add authorization header if credentials are available
-        // For public campaigns, authentication is optional
+        // Get access token if we have client credentials
+        if (!empty($this->client_id) && !empty($this->client_secret) && empty($this->access_token)) {
+            $this->get_access_token();
+        }
+        
         if (!empty($this->access_token)) {
             $args['headers']['Authorization'] = 'Bearer ' . $this->access_token;
+        }
+
+        // Log the request details
+        error_log('Making API request to: ' . $url);
+        if (!empty($this->access_token)) {
+            error_log('Using access token: ' . substr($this->access_token, 0, 10) . '...');
+        } else {
+            error_log('No access token available');
         }
 
         // Make the request
         $response = wp_remote_get($url, $args);
 
         if (is_wp_error($response)) {
+            error_log('HTTP Request Error: ' . $response->get_error_message());
             return new WP_Error('api_request_failed', __('Failed to connect to Tiltify API', TILTIFY_INTEGRATION_TEXT_DOMAIN));
         }
 
         $response_code = wp_remote_retrieve_response_code($response);
         $body = wp_remote_retrieve_body($response);
+        
+        error_log('API Response Code: ' . $response_code);
+        error_log('API Response Body: ' . $body);
 
         if ($response_code !== 200) {
             $error_message = $this->get_error_message($response_code, $body);
+            error_log('API Error Message: ' . $error_message);
             return new WP_Error('api_error', $error_message);
         }
 
@@ -378,6 +394,87 @@ class Tiltify_API {
             default:
                 return sprintf(__('API error (HTTP %d): %s', TILTIFY_INTEGRATION_TEXT_DOMAIN), $response_code, $body);
         }
+    }
+
+    /**
+     * Get OAuth2 access token using client credentials
+     */
+    private function get_access_token() {
+        if (empty($this->client_id) || empty($this->client_secret)) {
+            return false;
+        }
+
+        // Check if we have a cached token
+        $cache_key = 'tiltify_access_token_' . md5($this->client_id . $this->client_secret);
+        $cached_token = get_transient($cache_key);
+        
+        if ($cached_token) {
+            $this->access_token = $cached_token;
+            return true;
+        }
+
+        // Request new access token
+        $token_url = 'https://v5api.tiltify.com/oauth/token';
+        
+        $args = array(
+            'method' => 'POST',
+            'timeout' => 15,
+            'headers' => array(
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'Accept' => 'application/json'
+            ),
+            'body' => http_build_query(array(
+                'grant_type' => 'client_credentials',
+                'client_id' => $this->client_id,
+                'client_secret' => $this->client_secret,
+                'scope' => 'public'
+            ))
+        );
+
+        error_log('Requesting OAuth token from: ' . $token_url);
+        error_log('OAuth request body: ' . http_build_query(array(
+            'grant_type' => 'client_credentials',
+            'client_id' => $this->client_id,
+            'client_secret' => substr($this->client_secret, 0, 8) . '...', // Don't log full secret
+            'scope' => 'public'
+        )));
+        
+        $response = wp_remote_request($token_url, $args);
+
+        if (is_wp_error($response)) {
+            error_log('Tiltify OAuth Error: ' . $response->get_error_message());
+            return false;
+        }
+
+        $response_code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        
+        error_log('OAuth Response Code: ' . $response_code);
+        error_log('OAuth Response Body: ' . $body);
+
+        if ($response_code !== 200) {
+            error_log('Tiltify OAuth Error: HTTP ' . $response_code . ' - ' . $body);
+            return false;
+        }
+
+        $token_data = json_decode($body, true);
+
+        if (!isset($token_data['access_token'])) {
+            error_log('Tiltify OAuth Error: No access token in response');
+            error_log('Full token response: ' . json_encode($token_data, JSON_PRETTY_PRINT));
+            return false;
+        }
+
+        error_log('OAuth Success: Got access token (length: ' . strlen($token_data['access_token']) . ')');
+        error_log('Token expires in: ' . ($token_data['expires_in'] ?? 'unknown') . ' seconds');
+
+        $this->access_token = $token_data['access_token'];
+        
+        // Cache the token (expires in 1 hour by default, cache for 50 minutes to be safe)
+        $expires_in = isset($token_data['expires_in']) ? intval($token_data['expires_in']) - 600 : 3000;
+        set_transient($cache_key, $this->access_token, $expires_in);
+
+        return true;
     }
 
     /**
