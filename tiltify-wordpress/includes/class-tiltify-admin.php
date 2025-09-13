@@ -312,7 +312,7 @@ class Tiltify_Admin {
     public function campaign_id_callback() {
         $value = get_option('tiltify_campaign_id', '');
         echo '<input type="text" id="tiltify_campaign_id" name="tiltify_campaign_id" value="' . esc_attr($value) . '" class="regular-text" required />';
-        echo '<p class="description">' . __('Your Tiltify campaign ID (found in your campaign URL)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
+        echo '<p class="description">' . __('Your Tiltify campaign ID (UUID format like "2f9e7c6f-42ea-4a49-b3bb-047a5dfefb5f" found in your private campaign URL)', TILTIFY_INTEGRATION_TEXT_DOMAIN) . '</p>';
     }
 
     /**

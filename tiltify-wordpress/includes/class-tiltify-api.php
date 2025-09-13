@@ -161,17 +161,52 @@ class Tiltify_API {
         }
 
         // Try to fetch campaign data
-        $endpoint = "/api/public/campaigns/{$campaign_id}";
-        $response = $this->make_request($endpoint, array(), false); // Don't cache test requests
+        // Based on Tiltify API v5 OpenAPI specification
+        $endpoints_to_try = array(
+            "/api/public/campaigns/{$campaign_id}",
+            "/api/public/fundraising_events/{$campaign_id}",
+            "/campaigns/{$campaign_id}",
+            "/fundraising_events/{$campaign_id}"
+        );
+        
+        $response = null;
+        $last_error = null;
+        
+        foreach ($endpoints_to_try as $endpoint) {
+            $full_url = $this->api_base . $endpoint;
+            error_log("Trying Tiltify API URL: " . $full_url);
+            
+            $test_response = $this->make_request($endpoint, array(), false);
+            
+            if (!is_wp_error($test_response)) {
+                $response = $test_response;
+                error_log("Success with endpoint: " . $endpoint);
+                break;
+            } else {
+                $last_error = $test_response;
+                error_log("Failed with endpoint " . $endpoint . ": " . $test_response->get_error_message());
+            }
+        }
+        
+        if ($response === null) {
+            $response = $last_error; // Use the last error
+        }
 
         // Restore original credentials
         $this->client_id = $original_client_id;
         $this->client_secret = $original_client_secret;
 
         if (is_wp_error($response)) {
+            // Enhanced error reporting  
+            $error_message = $response->get_error_message();
+            error_log("Tiltify API Error: " . $error_message);
+            
+            // Show which endpoint succeeded (if any) or which was the last tried
+            $attempted_endpoints = implode(', ', $endpoints_to_try);
+            
             return array(
                 'success' => false,
-                'message' => $response->get_error_message()
+                'message' => $error_message . " (Tried endpoints: {$attempted_endpoints})"
             );
         }
 
@@ -321,9 +356,15 @@ class Tiltify_API {
      * @return string Error message
      */
     private function get_error_message($response_code, $body) {
+        // Try to parse error from response body first for better error messages
+        $error_data = json_decode($body, true);
+        if (isset($error_data['error']['message'])) {
+            return $error_data['error']['message'];
+        }
+        
         switch ($response_code) {
             case 401:
-                return __('Invalid API token or unauthorized access', TILTIFY_INTEGRATION_TEXT_DOMAIN);
+                return __('Unauthorized access - this may be a private campaign requiring authentication', TILTIFY_INTEGRATION_TEXT_DOMAIN);
             case 403:
                 return __('Access forbidden - check your API permissions', TILTIFY_INTEGRATION_TEXT_DOMAIN);
             case 404:
@@ -335,12 +376,7 @@ class Tiltify_API {
             case 503:
                 return __('Tiltify API is currently unavailable', TILTIFY_INTEGRATION_TEXT_DOMAIN);
             default:
-                // Try to parse error from response body
-                $error_data = json_decode($body, true);
-                if (isset($error_data['error']['message'])) {
-                    return $error_data['error']['message'];
-                }
-                return sprintf(__('API error (HTTP %d)', TILTIFY_INTEGRATION_TEXT_DOMAIN), $response_code);
+                return sprintf(__('API error (HTTP %d): %s', TILTIFY_INTEGRATION_TEXT_DOMAIN), $response_code, $body);
         }
     }
 
