@@ -3,7 +3,6 @@
  * Plugin Name: Tiltify Wordpress Integration
  * Plugin URI: https://github.com/athuler/tiltify-wordpress
  * Description: Display live fundraising data from Tiltify campaigns with real-time updates, donation buttons, and customizable widgets.
- * Version: 0.1.1
  * Author: Andrei Thüler
  * Author URI: https://andreithuler.com
  * License: GPL v2 or later
@@ -23,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('TILTIFY_INTEGRATION_VERSION', '0.1.1');
+define('TILTIFY_INTEGRATION_VERSION', '1.0');
 define('TILTIFY_INTEGRATION_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('TILTIFY_INTEGRATION_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('TILTIFY_INTEGRATION_PLUGIN_FILE', __FILE__);
