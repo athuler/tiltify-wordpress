@@ -187,17 +187,6 @@ class Tiltify_Admin {
             return;
         }
 
-        // Handle form submission messages
-        if (isset($_GET['settings-updated'])) {
-            add_settings_error(
-                'tiltify_messages',
-                'tiltify_message',
-                __('Settings saved successfully!', TILTIFY_INTEGRATION_TEXT_DOMAIN),
-                'updated'
-            );
-        }
-
-        settings_errors('tiltify_messages');
         ?>
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
