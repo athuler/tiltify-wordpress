@@ -295,23 +295,38 @@ class Tiltify_API {
     private function process_campaign_data($response) {
         $data = $response['data'] ?? array();
 
+        // Format currency amounts
+        $amount_raised = floatval($data['amount_raised']['value'] ?? 0);
+        $goal = floatval($data['goal']['value'] ?? 0);
+        $currency = $data['amount_raised']['currency'] ?? 'USD';
+        
+        $amount_raised_formatted = $this->format_currency($amount_raised, $currency);
+        $goal_formatted = $this->format_currency($goal, $currency);
+
         return array(
             'id' => $data['id'] ?? '',
             'name' => $data['name'] ?? '',
             'description' => $data['description'] ?? '',
-            'amount_raised' => floatval($data['amount_raised']['value'] ?? 0),
-            'amount_raised_formatted' => $data['amount_raised']['formatted'] ?? '$0',
-            'goal' => floatval($data['goal']['value'] ?? 0),
-            'goal_formatted' => $data['goal']['formatted'] ?? '$0',
-            'currency' => $data['amount_raised']['currency'] ?? 'USD',
+            'amount_raised' => $amount_raised,
+            'amount_raised_formatted' => $amount_raised_formatted,
+            'goal' => $goal,
+            'goal_formatted' => $goal_formatted,
+            'currency' => $currency,
             'percentage' => $this->calculate_percentage($data),
             'status' => $data['status'] ?? 'unknown',
             'url' => $data['url'] ?? '',
-            'thumbnail_url' => $data['thumbnail']['src'] ?? '',
+            'donate_url' => $data['donate_url'] ?? '',
+            'thumbnail_url' => $data['avatar']['src'] ?? '',
             'slug' => $data['slug'] ?? '',
-            'started_at' => $data['started_at'] ?? '',
-            'ends_at' => $data['ends_at'] ?? '',
-            'total_donations' => intval($data['supporting_amount'] ?? 0),
+            'started_at' => $data['inserted_at'] ?? '',
+            'ends_at' => $data['retired_at'] ?? '',
+            'published_at' => $data['published_at'] ?? '',
+            'updated_at' => $data['updated_at'] ?? '',
+            'total_donations' => 0, // This data isn't in this endpoint
+            'user' => array(
+                'username' => $data['user']['username'] ?? '',
+                'avatar' => $data['user']['avatar']['src'] ?? ''
+            ),
             'last_updated' => current_time('mysql')
         );
     }
@@ -510,6 +525,14 @@ class Tiltify_API {
      * @return string Donation URL
      */
     public function get_donation_url($campaign_id = null) {
+        // Try to get the donation URL from campaign data first
+        $campaign_data = $this->get_campaign_data($campaign_id);
+        
+        if (!is_wp_error($campaign_data) && !empty($campaign_data['donate_url'])) {
+            return $campaign_data['donate_url'];
+        }
+
+        // Fallback to constructed URL
         if (empty($campaign_id)) {
             $campaign_id = get_option('tiltify_campaign_id', '');
         }
@@ -518,7 +541,7 @@ class Tiltify_API {
             return '';
         }
 
-        return "https://tiltify.com/+/{$campaign_id}/donate";
+        return "https://donate.tiltify.com/{$campaign_id}";
     }
 
     /**
