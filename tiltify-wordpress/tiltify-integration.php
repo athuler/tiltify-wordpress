@@ -5,6 +5,7 @@
  * Description: Display live fundraising data from Tiltify campaigns with real-time updates, donation buttons, and customizable widgets.
  * Author: Andrei Thüler
  * Author URI: https://andreithuler.com
+ * Version: 1.0
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: tiltify-wordpress
